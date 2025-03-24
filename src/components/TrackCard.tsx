@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Track } from '../types';
-import { findArtistIdByName } from '../utils/artistUtils';
-import { usePlayer } from '../contexts/PlayerContext';
-import TrackInfo from './Track/TrackInfo';
-import TrackTitle from './Track/TrackTitle';
-import TrackCover from './Track/TrackCover';
-import TrackActions from './Track/TrackActions';
-import CommentsSection from './Comments/CommentsSection';
-import { useModal } from '../contexts/ModalContext';
+import React, { useState } from "react";
+import { Track } from "../types";
+import { findArtistIdByName } from "../utils/artistUtils";
+import { usePlayer } from "../contexts/PlayerContext";
+import TrackInfo from "./Track/TrackInfo";
+import TrackTitle from "./Track/TrackTitle";
+import TrackCover from "./Track/TrackCover";
+import TrackActions from "./Track/TrackActions";
+import CommentsSection from "./Comments/CommentsSection";
+import { useModal } from "../contexts/ModalContext";
 
 interface TrackCardProps {
   track: Track;
@@ -16,11 +16,11 @@ interface TrackCardProps {
   showMobileComments?: boolean;
 }
 
-export default function TrackCard({ 
-  track, 
-  onPurchase, 
+export default function TrackCard({
+  track,
+  onPurchase,
   showArtist = true,
-  showMobileComments = false
+  showMobileComments = false,
 }: TrackCardProps) {
   const [showComments, setShowComments] = useState(false);
   const artistId = findArtistIdByName(track.artist);
@@ -31,9 +31,9 @@ export default function TrackCard({
   const handlePlayClick = () => {
     playTrack(track);
   };
-  
+
   // Get artist name display
-  const displayArtist = track.artist === 'Daytona Starsky' ? 'Daytona Starsky' : track.artist;
+  const displayArtist = track.artist || "Unknown Artist";
 
   return (
     <div className="gradient-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all border border-accent/20 hover:border-accent/40">
@@ -50,7 +50,7 @@ export default function TrackCard({
           <TrackInfo
             title={track.title}
             artist={displayArtist}
-            artistId={artistId}
+            artistId={artistId || undefined}
             isCurrentTrack={isCurrentTrack}
             isPlaying={isPlaying}
             onTitleClick={handlePlayClick}
@@ -68,9 +68,11 @@ export default function TrackCard({
           price={track.price}
           showComments={showMobileComments}
           onToggleComments={() => setShowComments(!showComments)}
-          onPurchase={() => openPurchaseModal(track.title, track.price, track.artist)}
+          onPurchase={() =>
+            openPurchaseModal(track.title, track.price, track.artist)
+          }
         />
-        
+
         {showComments && showMobileComments && (
           <div className="mt-4 pt-4 border-t border-accent/20">
             <CommentsSection trackId={track.id} />
